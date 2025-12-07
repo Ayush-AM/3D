@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rnxg-3d-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rnxg-3d
+  template:
+    metadata:
+      labels:
+        app: rnxg-3d
+    spec:
+      containers:
+      - name: rnxg-3d
+        image: ankush1808/webapp:03

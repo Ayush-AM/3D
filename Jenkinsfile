@@ -1,21 +1,37 @@
 pipeline {
     agent any
 
+    environment{
+        DOCKER_IMAGE = "ankush1808/rnxg-3d"
+        DOCKER_CREDS = "dockerhub-creds"
+    }
+
     stages {
-        stage('add docker images') {
+        stage('build docker images') {
             steps {
                 sh '''
-                docker build -t rnxg-3d:latest .
-                docker images | grep rnxg-3d
+                docker build -t $DOCKER_IMAGE:latest .
+                docker images
                 '''
             }
         }
 
-        stage('run docker images') {
+        stage('login to docker hub'){
+            steps{
+                withCredentials([usernamePassword(
+                    credentialId: DOCKER_CREDS,
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                }
+            }
+        }
+
+        stage('push docker images') {
             steps {
                 sh '''
-                docker rm -f rnxg-3d || true
-                docker run -d -p 8083:80 --name rnxg-3d rnxg-3d:latest
+                docker push $DOCKER_IMAGE:latest
                 '''
             }
         }

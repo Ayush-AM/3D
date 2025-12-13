@@ -4,14 +4,18 @@ pipeline {
     stages {
         stage('add docker images') {
             steps {
-                echo "docker build -t rnxg-3d ."
+                sh '''
+                docker build -t rnxg-3d:latest .
+                docker images | grep rnxg-3d
+                '''
             }
         }
 
         stage('run docker images') {
             steps {
                 sh '''
-                docker run -d -p 8083:80 --name rnxg-3d rnxg-3d
+                docker rm -f rnxg-3d || true
+                docker run -d -p 8083:80 --name rnxg-3d rnxg-3d:latest
                 '''
             }
         }

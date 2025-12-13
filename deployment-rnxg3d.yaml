@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
       - name: rnxg-3d
-        image: ankush1808/webapp:03
+        image: ankush1808/webapp:04

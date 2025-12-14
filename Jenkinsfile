@@ -13,7 +13,7 @@ pipeline {
     //     }
     // }
 
-    build and push docker image to docker hub
+    //build and push docker image to docker hub
     environment{
         DOCKER_IMAGE = "ankush1808/rnxg-3d"
         DOCKER_CREDS = "dockerhub-creds"

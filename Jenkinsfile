@@ -55,8 +55,12 @@ pipeline {
         stage('deploy to kubernetes cluster'){
             steps{
                 sh '''
+                docker run --rm -v ~/.kube:/root/.kube -v $(pwd):/workspace bitnami/kubectl:latest 
                 kubectl apply -f deployment-rnxg3d.yaml
+
+                docker run --rm -v ~/.kube:/root/.kube -v $(pwd):/workspace bitnami/kubectl:latest 
                 kubectl apply -f service-rnxg3d.yaml
+                
                 kubectl get pods
                 kubectl get services
                 '''

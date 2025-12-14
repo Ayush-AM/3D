@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rnxg-3d-deployment
+  name: rnxg-3d
 spec:
   replicas: 3
   selector:
@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
       - name: rnxg-3d
-        image: ankush1808/webapp:04
+        image: ankush1808/rnxg-3d:latest

@@ -51,5 +51,16 @@ pipeline {
                 '''
             }
         }
+
+        stage('deploy to kubernetes cluster'){
+            steps{
+                sh '''
+                kubectl apply -f deployment-rnxg3d.yaml
+                kubectl apply -f service-rnxg3d.yaml
+                kubectl get pods
+                kubectl get services
+                '''
+            }
+        }
     }
 }

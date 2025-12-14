@@ -25,7 +25,7 @@ pipeline {
             steps {
                 sh '''
                 docker build -t $DOCKER_IMAGE:$DOCKER_TAG .
-                doker tag $DOCKER_IMAGE:$DOCKER_TAG $DOCKER_IMAGE:latest
+                docker tag $DOCKER_IMAGE:$DOCKER_TAG $DOCKER_IMAGE:latest
                 docker images
                 '''
             }

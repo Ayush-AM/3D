@@ -18,6 +18,9 @@ pipeline {
         DOCKER_IMAGE = "ankush1808/rnxg-3d"
         DOCKER_CREDS = "dockerhub-creds"
         DOCKER_TAG = "${BUILD_NUMBER}"
+        HELM_RELEASE = "rnxg3d"
+        HELM_CHART = "./rnxg-3d"
+        KUBE_NAMESPACE = "default"
     }
 
     stages {
@@ -47,22 +50,39 @@ pipeline {
             steps {
                 sh '''
                 docker push $DOCKER_IMAGE:$DOCKER_TAG
-                docker push $DOCKER_IMAGE:latest
                 '''
             }
         }
 
-        // stage('deploy to kubernetes cluster'){
-        //     steps{
-        //         sh '''
-        //         docker run --rm -v ~/.kube:/root/.kube -v $(pwd):/workspace bitnami/kubectl:latest kubectl apply -f deployment-rnxg3d.yaml
+        stage('deploy using helm'){
+            steps{
+                script{
+                    sh '''
+                    helm upgrade --install ${HELM_RELEASE} ${HELM_CHART} \
+                    --namespace ${KUBE_NAMESPACE} \
+                    --set image.repository=${DOCKER_IMAGE} \
+                    --set image.tag=${DOCKER_TAG}
+                    '''
+                }
+            }
+        }
 
-        //         docker run --rm -v ~/.kube:/root/.kube -v $(pwd):/workspace bitnami/kubectl:latest kubectl apply -f service-rnxg3d.yaml
+        stage('Verify Deployment'){
+            steps{
+                sh '''
+                kubectl get pods
+                kubetcl get svc
+                '''
+            }
+        }
+    }
 
-        //         kubectl get pods
-        //         kubectl get services
-        //         '''
-        //     }
-        // }
+    post {
+        success {
+            echo "✅ Deployment Successful"
+        }
+        failure {
+            echo "❌ Deployment Failed"
+        }
     }
 }

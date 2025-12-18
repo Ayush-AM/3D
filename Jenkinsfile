@@ -62,7 +62,6 @@ pipeline {
                     --namespace ${KUBE_NAMESPACE} \
                     --set image.repository=${DOCKER_IMAGE} \
                     --set image.tag=${DOCKER_TAG}
-                    --kube-insecure-skip-tls-verify
                     '''
                 }
             }

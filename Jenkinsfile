@@ -71,7 +71,7 @@ pipeline {
             steps{
                 sh '''
                 kubectl get pods
-                kubetcl get svc
+                kubectl get svc
                 '''
             }
         }
